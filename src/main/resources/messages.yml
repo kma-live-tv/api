@@ -1,0 +1,7 @@
+signup:
+  email_already_exists: "Email đã tồn tại"
+  username_already_exists: "Username đã tồn tại"
+login:
+  bad_credentials: "Thông tin đăng nhập không đúng"
+exception:
+  internal_server_error: "Lỗi máy chủ không xác định"

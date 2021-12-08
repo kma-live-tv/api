@@ -6,7 +6,9 @@ import com.nopain.livetv.dto.SignUpResponse;
 import com.nopain.livetv.model.User;
 
 public interface UserService {
-    public User findByUsername(String username);
-    public SignUpResponse signUp(SignUpRequest signUpRequest);
-    public AuthenticatedUser findAuthenticatedUserByUsername(String username);
+    User findByUsername(String username);
+
+    SignUpResponse signUp(SignUpRequest signUpRequest);
+
+    AuthenticatedUser findAuthenticatedUserByUsername(String username);
 }

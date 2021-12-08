@@ -1,5 +1,6 @@
 package com.nopain.livetv.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,9 +11,11 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @NoArgsConstructor
 public class LoginRequest {
-    @NotEmpty(message = "{login_username_not_empty}")
+    @NotEmpty
+    @Schema(example = "user1")
     private String username;
 
-    @NotEmpty(message = "{login_password_not_empty}")
+    @NotEmpty
+    @Schema(example = "Password1!")
     private String password;
 }

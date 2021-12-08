@@ -1,7 +1,7 @@
 package com.nopain.livetv.security.service;
 
-import com.nopain.livetv.security.model.CustomUserDetails;
 import com.nopain.livetv.repository.UserRepository;
+import com.nopain.livetv.security.model.CustomUserDetails;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
