@@ -12,7 +12,7 @@ import java.util.Collections;
 
 @AllArgsConstructor
 @Getter
-public class CustomUserDetails implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
     private transient User user;
 
     @Override

@@ -13,7 +13,7 @@ RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 FROM openjdk:11-jdk
 VOLUME /tmp
 ARG DEPENDENCY=/workspace/app/target/dependency
-ARG PORT=3000
+ARG PORT=8088
 ENV PORT=${PORT}
 
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib

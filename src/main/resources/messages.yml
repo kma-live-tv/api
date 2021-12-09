@@ -5,3 +5,4 @@ login:
   bad_credentials: "Thông tin đăng nhập không đúng"
 exception:
   internal_server_error: "Lỗi máy chủ không xác định"
+  access_denied: "Quyền truy cập bị từ chối"

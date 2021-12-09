@@ -17,6 +17,7 @@
 		<java.version>11</java.version>
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 		<org.flywaydb.version>8.2.0</org.flywaydb.version>
+		<org.springdoc.version>1.5.13</org.springdoc.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -39,7 +40,12 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.5.12</version>
+			<version>${org.springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-security</artifactId>
+			<version>${org.springdoc.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mapstruct</groupId>

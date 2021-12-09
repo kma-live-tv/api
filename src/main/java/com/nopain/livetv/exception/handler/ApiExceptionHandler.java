@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -40,6 +41,16 @@ public class ApiExceptionHandler {
     public ErrorMessage handleBadCredentialsException(BadCredentialsException ex) {
         return new ErrorMessage(HttpStatus.UNAUTHORIZED.value(),
                 messageSource.getMessage("login.bad_credentials",
+                        null,
+                        Locale.getDefault()),
+                ex.toString());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ErrorMessage handleAccessDeniedException(AccessDeniedException ex) {
+        return new ErrorMessage(HttpStatus.FORBIDDEN.value(),
+                messageSource.getMessage("exception.access_denied",
                         null,
                         Locale.getDefault()),
                 ex.toString());

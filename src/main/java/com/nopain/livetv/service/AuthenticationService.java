@@ -4,7 +4,7 @@ import com.nopain.livetv.dto.LoginRequest;
 import com.nopain.livetv.dto.LoginResponse;
 import com.nopain.livetv.mapper.UserMapper;
 import com.nopain.livetv.security.jwt.JwtTokenProvider;
-import com.nopain.livetv.security.model.CustomUserDetails;
+import com.nopain.livetv.security.model.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,7 +28,7 @@ public class AuthenticationService {
 
         final var authenticatedUser = userService.findAuthenticatedUserByUsername(username);
         final var user = UserMapper.INSTANCE.convertToUser(authenticatedUser);
-        final var token = jwtTokenProvider.createAccessToken(new CustomUserDetails(user));
+        final var token = jwtTokenProvider.createAccessToken(new UserDetailsImpl(user));
 
         log.info("{} has successfully logged in!", user.getUsername());
 

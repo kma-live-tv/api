@@ -1,6 +1,6 @@
 package com.nopain.livetv.security.jwt;
 
-import com.nopain.livetv.security.model.CustomUserDetails;
+import com.nopain.livetv.security.model.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import java.util.Date;
 public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
 
-    public String createAccessToken(CustomUserDetails userDetails) {
+    public String createAccessToken(UserDetailsImpl userDetails) {
         var now = new Date();
         var expiryDate = new Date(now.getTime() + jwtProperties.getExpiration());
 

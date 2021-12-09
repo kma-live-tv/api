@@ -1,25 +1,28 @@
 package com.nopain.livetv.controller;
 
 import com.nopain.livetv.decorator.JWTSecured;
-import com.nopain.livetv.model.User;
-import com.nopain.livetv.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import com.nopain.livetv.dto.AuthenticatedUser;
+import com.nopain.livetv.mapper.UserMapper;
+import com.nopain.livetv.security.model.UserDetailsImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/users")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
-    private final UserRepository userRepository;
 
-    @GetMapping("/{id}")
+    @GetMapping("/me")
     @JWTSecured
-    public User getUser(@PathVariable Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public ResponseEntity<AuthenticatedUser> getAuthenticatedUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        var user = userDetails.getUser();
+
+        return ResponseEntity
+                .status(200)
+                .body(UserMapper.INSTANCE.convertToAuthenticatedUserDto(user));
     }
 }
