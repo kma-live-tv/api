@@ -1,0 +1,23 @@
+asyncapi: '2.2.0'
+info:
+  title: LiveTV
+  version: 1.0.0
+  description: This service is in charge of processing events
+servers:
+  production:
+    url: wss://livetv.2soft.top/api/v1/ws/websocket
+    protocol: stomp
+    description: This is "LiveTV" broker.
+channels:
+  /topic/greetings:
+    subscribe:
+      message:
+        $ref: '#/components/messages/GreetingMessage'
+components:
+  messages:
+    GreetingMessage:
+      payload:
+        type: object
+        properties:
+          content:
+            type: string

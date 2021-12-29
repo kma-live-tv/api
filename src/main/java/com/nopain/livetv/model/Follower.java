@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Table(name = "followers")
-public class Follower extends ApplicationModel{
+public class Follower extends ApplicationModel {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(nullable = false)
     private User followedBy;
