@@ -6,19 +6,15 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+public class User extends ApplicationModel {
     @NotBlank
     @Size(min = 6, max = 20)
     @Column(unique = true, nullable = false)
@@ -41,4 +37,19 @@ public class User {
 
     @Column(nullable = false)
     private Long balance = 0L;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Livestream> livestreams;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Reaction> reactions;
+
+    @OneToMany(mappedBy = "followTo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Follower> followers;
+
+    @OneToMany(mappedBy = "followedBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Follower> followings;
 }

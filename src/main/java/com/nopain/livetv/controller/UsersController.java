@@ -1,7 +1,7 @@
 package com.nopain.livetv.controller;
 
 import com.nopain.livetv.decorator.JWTSecured;
-import com.nopain.livetv.dto.AuthenticatedUser;
+import com.nopain.livetv.dto.UserResponse;
 import com.nopain.livetv.mapper.UserMapper;
 import com.nopain.livetv.security.model.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UsersController {
 
     @GetMapping("/me")
     @JWTSecured
-    public ResponseEntity<AuthenticatedUser> getAuthenticatedUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<UserResponse> getAuthenticatedUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         var user = userDetails.getUser();
 
         return ResponseEntity

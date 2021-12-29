@@ -1,6 +1,6 @@
 package com.nopain.livetv.service;
 
-import com.nopain.livetv.dto.AuthenticatedUser;
+import com.nopain.livetv.dto.UserResponse;
 import com.nopain.livetv.dto.SignUpRequest;
 import com.nopain.livetv.dto.SignUpResponse;
 import com.nopain.livetv.mapper.UserMapper;
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         return new SignUpResponse(SIGN_UP_SUCCESSFUL);
     }
 
-    public AuthenticatedUser findAuthenticatedUserByUsername(String username) {
+    public UserResponse findAuthenticatedUserByUsername(String username) {
 
         final User user = findByUsername(username);
 

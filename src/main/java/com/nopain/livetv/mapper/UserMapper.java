@@ -1,6 +1,6 @@
 package com.nopain.livetv.mapper;
 
-import com.nopain.livetv.dto.AuthenticatedUser;
+import com.nopain.livetv.dto.UserResponse;
 import com.nopain.livetv.dto.SignUpRequest;
 import com.nopain.livetv.model.User;
 import org.mapstruct.Mapper;
@@ -12,7 +12,7 @@ public interface UserMapper {
 
     User convertToUser(SignUpRequest signUpRequest);
 
-    AuthenticatedUser convertToAuthenticatedUserDto(User user);
+    UserResponse convertToAuthenticatedUserDto(User user);
 
-    User convertToUser(AuthenticatedUser authenticatedUser);
+    User convertToUser(UserResponse userResponse);
 }
