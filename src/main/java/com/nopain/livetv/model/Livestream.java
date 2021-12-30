@@ -31,4 +31,7 @@ public class Livestream extends ApplicationModel {
 
     @OneToMany(mappedBy = "livestream", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Reaction> reactions;
+
+    @Column()
+    private Integer viewsCount = 0;
 }

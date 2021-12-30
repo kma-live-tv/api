@@ -4,15 +4,36 @@ info:
   version: 1.0.0
   description: This service is in charge of processing events
 servers:
-  production:
+  deelopment:
     url: wss://livetv.2soft.top/api/v1/ws/websocket
     protocol: stomp
     description: This is "LiveTV" broker.
 channels:
   /topic/greetings:
     subscribe:
+      description: This is "LiveTV" broker.
       message:
         $ref: '#/components/messages/GreetingMessage'
+  /topic/livestreams/{id}/views-count:
+    parameters:
+      id:
+        description: Id của livestream.
+        schema:
+          type: integer
+    subscribe:
+      description: Trả về dữ liệu mỗi khi lượt xem thay đổi.
+      message:
+        $ref: '#/components/messages/ViewsCountUpdatedMessage'
+  /topic/livestreams/{id}/dvr:
+    parameters:
+      id:
+        description: Id của livestream.
+        schema:
+          type: integer
+    subscribe:
+      description: Trả về dữ liệu mỗi khi lưu xong livestream bằng dvr.
+      message:
+        $ref: '#/components/messages/DvrDoneMessage'
 components:
   messages:
     GreetingMessage:
@@ -20,4 +41,20 @@ components:
         type: object
         properties:
           content:
+            type: string
+    ViewsCountUpdatedMessage:
+      payload:
+        type: object
+        properties:
+          livestreamId:
+            type: integer
+          viewsCount:
+            type: integer
+    DvrDoneMessage:
+      payload:
+        type: object
+        properties:
+          livestreamId:
+            type: integer
+          dvrFile:
             type: string

@@ -1,4 +1,4 @@
-package com.nopain.livetv.dto;
+package com.nopain.livetv.dto.stomp;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GreetingMessageResponse {
+public class GreetingMessage {
     @Schema(example = "Hello Cong")
     private String content;
 }

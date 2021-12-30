@@ -1,7 +1,7 @@
 package com.nopain.livetv.controller;
 
-import com.nopain.livetv.dto.GreetingMessageResponse;
 import com.nopain.livetv.dto.HelloMessageRequest;
+import com.nopain.livetv.dto.stomp.GreetingMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +20,12 @@ public class HelloController {
 
     @PostMapping("/hello")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<GreetingMessageResponse> sayHello(@Valid @RequestBody HelloMessageRequest message) {
+    public ResponseEntity<GreetingMessage> sayHello(@Valid @RequestBody HelloMessageRequest message) {
         var content = "Hello " + message.getName();
-        simpMessagingTemplate.convertAndSend("/topic/greetings", new GreetingMessageResponse(content));
+        simpMessagingTemplate.convertAndSend("/topic/greetings", new GreetingMessage(content));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new GreetingMessageResponse(content));
+                .body(new GreetingMessage(content));
     }
 }
