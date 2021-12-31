@@ -14,6 +14,7 @@ import java.util.List;
 public class LivestreamResponse extends ApplicationModelResponse {
     private String streamKey;
     private String dvrFile;
+    private String content;
 
     private List<CommentResponse> comments;
     private List<ReactionResponse> reactions;

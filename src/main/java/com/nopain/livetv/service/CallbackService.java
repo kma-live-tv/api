@@ -3,15 +3,12 @@ package com.nopain.livetv.service;
 import com.nopain.livetv.dto.callback.BaseStreamEvent;
 import com.nopain.livetv.dto.callback.DvrEvent;
 import com.nopain.livetv.dto.srs.AllStreamsResponse;
-import com.nopain.livetv.dto.stomp.DvrDoneMessage;
-import com.nopain.livetv.dto.stomp.ViewsCountUpdatedMessage;
 import com.nopain.livetv.model.Livestream;
 import com.nopain.livetv.model.LivestreamStatus;
 import com.nopain.livetv.properties.SrsProperties;
 import com.nopain.livetv.repository.LivestreamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.webjars.NotFoundException;
@@ -28,7 +25,8 @@ public class CallbackService {
     private final LivestreamRepository livestreamRepository;
     private final SrsProperties srsProperties;
     private final RestTemplate restTemplate;
-    private final SimpMessagingTemplate messagingTemplate;
+    private final StompService stompService;
+    private final NotificationService notificationService;
 
     public void onEvent(BaseStreamEvent event) throws NotFoundException {
         var livestream = livestreamService.findByStreamKey(event.getStream());
@@ -57,18 +55,22 @@ public class CallbackService {
     private void onPublish(Livestream livestream) {
         livestream.setStatus(LivestreamStatus.STREAMING);
         livestreamRepository.save(livestream);
+
+        notificationService.pushPublishEvent(livestream);
     }
 
     private void onUnPublish(Livestream livestream) {
-        livestream.setStatus(LivestreamStatus.END);
+        livestream.setStatus(LivestreamStatus.RECORDING);
         livestream.setViewsCount(0);
         livestreamRepository.save(livestream);
+
+        stompService.pubEndLivestream(livestream.getId());
     }
 
     private void updateViewsCount(Livestream livestream) {
         try {
             AllStreamsResponse allStreams = restTemplate.getForObject(
-                    srsProperties.getApiUrl() + "/streams/",
+                    String.format("%s/streams/", srsProperties.getApiUrl()),
                     AllStreamsResponse.class
             );
 
@@ -86,15 +88,7 @@ public class CallbackService {
             livestream.setViewsCount(viewsCount);
             livestreamRepository.save(livestream);
 
-            messagingTemplate
-                    .convertAndSend(
-                            "/topic/livestreams/" + livestream.getId() + "/views-count",
-                            ViewsCountUpdatedMessage
-                                    .builder()
-                                    .viewsCount(viewsCount)
-                                    .livestreamId(livestream.getId())
-                                    .build()
-                    );
+            stompService.pubViewsCountChanged(livestream.getId(), viewsCount);
         } catch (Exception ex) {
             log.error(ex.toString());
         }
@@ -103,16 +97,9 @@ public class CallbackService {
     private void onDvr(Livestream livestream, String file) {
         String dvrFile = file.replace("./objs/nginx/html", "");
         livestream.setDvrFile(dvrFile);
+        livestream.setStatus(LivestreamStatus.END);
         livestreamRepository.save(livestream);
 
-        messagingTemplate
-                .convertAndSend(
-                        "/topic/livestreams/" + livestream.getId() + "/dvr",
-                        DvrDoneMessage
-                                .builder()
-                                .dvrFile(dvrFile)
-                                .livestreamId(livestream.getId())
-                                .build()
-                );
+        stompService.pubDvrDone(livestream.getId(), file);
     }
 }

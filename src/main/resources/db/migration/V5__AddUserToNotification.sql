@@ -1,0 +1,5 @@
+ALTER TABLE notifications
+    ADD CONSTRAINT FK_NOTIFICATIONS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE notifications
+    ALTER COLUMN user_id SET NOT NULL;

@@ -16,13 +16,16 @@ public class Livestream extends ApplicationModel {
     @Column(unique = true)
     private String streamKey;
 
+    @Column
+    private String content;
+
     @Column(unique = true)
     private String dvrFile;
 
     @Enumerated(EnumType.STRING)
     private LivestreamStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(nullable = false)
     private User user;
 

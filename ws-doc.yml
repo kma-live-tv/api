@@ -14,6 +14,26 @@ channels:
       description: This is "LiveTV" broker.
       message:
         $ref: '#/components/messages/GreetingMessage'
+  /topic/livestreams/{id}/reactions:
+    parameters:
+      id:
+        description: Id của livestream.
+        schema:
+          type: integer
+    subscribe:
+      description: Trả về dữ liệu mỗi khi livestream có thêm reaction.
+      message:
+        $ref: '#/components/messages/ReactionResponse'
+  /topic/livestreams/{id}/comments:
+    parameters:
+      id:
+        description: Id của livestream.
+        schema:
+          type: integer
+    subscribe:
+      description: Trả về dữ liệu mỗi khi livestream có thêm comment.
+      message:
+        $ref: '#/components/messages/CommentResponse'
   /topic/livestreams/{id}/views-count:
     parameters:
       id:
@@ -34,7 +54,51 @@ channels:
       description: Trả về dữ liệu mỗi khi lưu xong livestream bằng dvr.
       message:
         $ref: '#/components/messages/DvrDoneMessage'
+  /topic/livestreams/{id}/end:
+    parameters:
+      id:
+        description: Id của livestream.
+        schema:
+          type: integer
+    subscribe:
+      description: Trả về dữ liệu mỗi khi livestream kết thúc.
+      message:
+        payload:
+          type: integer
+          description: Id của livestream
+  /topic/users/{id}/notifications:
+    parameters:
+      id:
+        description: Id của user.
+        schema:
+          type: integer
+    subscribe:
+      description: Trả về dữ liệu mỗi khi user có thông báo mới.
+      message:
+        $ref: '#/components/messages/NotificationResponse'
 components:
+  schemas:
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        username:
+          type: string
+        email:
+          type: string
+        displayName:
+          type: string
+        balance:
+          type: integer
+          format: int64
   messages:
     GreetingMessage:
       payload:
@@ -58,3 +122,65 @@ components:
             type: integer
           dvrFile:
             type: string
+    NotificationResponse:
+      payload:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          createdAt:
+            type: string
+            format: date-time
+          updatedAt:
+            type: string
+            format: date-time
+          content:
+            type: string
+          livestreamId:
+            type: integer
+            format: int64
+          triggeredUserId:
+            type: integer
+            format: int64
+    ReactionResponse:
+      payload:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          createdAt:
+            type: string
+            format: date-time
+          updatedAt:
+            type: string
+            format: date-time
+          type:
+            type: string
+            enum:
+              - LIKE
+              - LOVE
+              - HAHA
+              - WOW
+              - SAD
+              - ANGRY
+          user:
+            $ref: '#/components/schemas/UserResponse'
+    CommentResponse:
+      payload:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          createdAt:
+            type: string
+            format: date-time
+          updatedAt:
+            type: string
+            format: date-time
+          content:
+            type: string
+          user:
+            $ref: '#/components/schemas/UserResponse'

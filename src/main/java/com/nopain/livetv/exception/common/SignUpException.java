@@ -1,4 +1,4 @@
-package com.nopain.livetv.exception.signup;
+package com.nopain.livetv.exception.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

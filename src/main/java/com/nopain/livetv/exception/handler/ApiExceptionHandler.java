@@ -1,13 +1,16 @@
 package com.nopain.livetv.exception.handler;
 
-import com.nopain.livetv.exception.signup.SignUpException;
+import com.nopain.livetv.exception.common.HttpException;
+import com.nopain.livetv.exception.common.SignUpException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -54,5 +57,13 @@ public class ApiExceptionHandler {
                         null,
                         Locale.getDefault()),
                 ex.toString());
+    }
+
+    @ExceptionHandler(HttpException.class)
+    @ResponseBody
+    public ResponseEntity<?> handleHttpException(HttpException exception) {
+        return ResponseEntity
+                .status(exception.getStatus())
+                .body(exception.getMessage());
     }
 }

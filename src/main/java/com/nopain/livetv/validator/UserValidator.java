@@ -1,7 +1,7 @@
 package com.nopain.livetv.validator;
 
 import com.nopain.livetv.dto.SignUpRequest;
-import com.nopain.livetv.exception.signup.SignUpException;
+import com.nopain.livetv.exception.common.SignUpException;
 import com.nopain.livetv.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

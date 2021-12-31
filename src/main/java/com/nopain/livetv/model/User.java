@@ -55,4 +55,7 @@ public class User extends ApplicationModel {
 
     @OneToMany(mappedBy = "followedBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Follower> followings;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Notification> notifications;
 }

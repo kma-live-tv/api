@@ -13,5 +13,5 @@ public interface LivestreamMapper {
 
     LivestreamResponse toResponse(Livestream livestream);
 
-    List<LivestreamResponse> toListResponse(List<Livestream> livestreams);
+    List<LivestreamResponse> toResponseList(List<Livestream> livestreams);
 }
