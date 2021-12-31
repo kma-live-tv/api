@@ -11,15 +11,3 @@ CREATE TABLE notifications
 
 ALTER TABLE livestreams
     ADD content VARCHAR(255);
-
-DROP VIEW jobrunr_jobs_stats;
-
-DROP TABLE jobrunr_backgroundjobservers CASCADE;
-
-DROP TABLE jobrunr_jobs CASCADE;
-
-DROP TABLE jobrunr_metadata CASCADE;
-
-DROP TABLE jobrunr_migrations CASCADE;
-
-DROP TABLE jobrunr_recurring_jobs CASCADE;
