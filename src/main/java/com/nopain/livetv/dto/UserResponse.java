@@ -12,4 +12,5 @@ public class UserResponse extends ApplicationModelResponse {
     private String email;
     private String displayName;
     private Long balance;
+    private boolean isFollowed;
 }

@@ -41,21 +41,24 @@ public class User extends ApplicationModel {
     @Column(nullable = false)
     private Long balance = 0L;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private List<Livestream> livestreams;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private List<Reaction> reactions;
 
-    @OneToMany(mappedBy = "followTo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "followTo", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private List<Follower> followers;
 
-    @OneToMany(mappedBy = "followedBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "followedBy", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private List<Follower> followings;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private List<Notification> notifications;
+
+    @Transient
+    private boolean isFollowed;
 }

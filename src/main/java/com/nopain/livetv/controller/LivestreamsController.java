@@ -26,6 +26,15 @@ public class LivestreamsController {
     private final StompService stompService;
 
     @JWTSecured
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<LivestreamResponse>> streamings() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(LivestreamMapper.INSTANCE.toResponseList(service.streamings()));
+    }
+
+    @JWTSecured
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<LivestreamResponse> create(

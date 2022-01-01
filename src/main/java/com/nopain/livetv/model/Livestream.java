@@ -29,10 +29,10 @@ public class Livestream extends ApplicationModel {
     @JoinColumn(nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "livestream", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "livestream", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "livestream", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "livestream", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private List<Reaction> reactions;
 
     @Column()

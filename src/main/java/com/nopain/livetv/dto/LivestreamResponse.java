@@ -1,5 +1,6 @@
 package com.nopain.livetv.dto;
 
+import com.nopain.livetv.model.LivestreamStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,6 @@ public class LivestreamResponse extends ApplicationModelResponse {
     private List<CommentResponse> comments;
     private List<ReactionResponse> reactions;
     private UserResponse user;
+
+    private LivestreamStatus status;
 }

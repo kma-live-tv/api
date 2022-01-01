@@ -6,17 +6,21 @@ import com.nopain.livetv.exception.common.HttpException;
 import com.nopain.livetv.mapper.UserMapper;
 import com.nopain.livetv.security.model.UserDetailsImpl;
 import com.nopain.livetv.service.FollowService;
+import com.nopain.livetv.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UsersController {
     private final FollowService followService;
+    private final UserService userService;
 
     @GetMapping("/me")
     @JWTSecured
@@ -25,7 +29,7 @@ public class UsersController {
 
         return ResponseEntity
                 .status(200)
-                .body(UserMapper.INSTANCE.convertToAuthenticatedUserDto(user));
+                .body(UserMapper.INSTANCE.toResponse(user));
     }
 
     @PostMapping("/{id}/follow")
@@ -54,5 +58,30 @@ public class UsersController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(true);
+    }
+
+    @GetMapping
+    @JWTSecured
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<UserResponse>> all(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(UserMapper.INSTANCE.toResponseList(userService.allUsers(
+                        userDetails.getUser()
+                )));
+    }
+
+    @GetMapping("/{id}")
+    @JWTSecured
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<UserResponse> get(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(UserMapper.INSTANCE.toResponse(userService.findUser(id, userDetails.getUser())));
     }
 }

@@ -6,13 +6,17 @@ import com.nopain.livetv.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     User convertToUser(SignUpRequest signUpRequest);
 
-    UserResponse convertToAuthenticatedUserDto(User user);
+    UserResponse toResponse(User user);
 
     User convertToUser(UserResponse userResponse);
+
+    List<UserResponse> toResponseList(List<User> users);
 }

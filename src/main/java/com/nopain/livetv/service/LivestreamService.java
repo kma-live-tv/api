@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,6 +21,10 @@ public class LivestreamService {
     private final LivestreamRepository repository;
     private final CommentRepository commentRepository;
     private final ReactionRepository reactionRepository;
+
+    public List<Livestream> streamings() {
+        return repository.findByStatus(LivestreamStatus.STREAMING);
+    }
 
     public Livestream find(Long id) {
         return repository.findById(id).orElseThrow();
@@ -41,6 +46,7 @@ public class LivestreamService {
                 .user(user)
                 .streamKey(UUID.randomUUID().toString())
                 .content(request.getContent())
+                .status(LivestreamStatus.STREAMING)
                 .build();
         repository.save(livestream);
 

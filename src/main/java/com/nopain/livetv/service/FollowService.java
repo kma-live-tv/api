@@ -6,11 +6,13 @@ import com.nopain.livetv.model.User;
 import com.nopain.livetv.repository.FollowerRepository;
 import com.nopain.livetv.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FollowService {
     private final FollowerRepository repository;
     private final UserRepository userRepository;
@@ -37,6 +39,9 @@ public class FollowService {
 
     public void unfollow(User currentUser, Long toUserId) {
         var follower = repository.findByFollowedByIdAndFollowToId(currentUser.getId(), toUserId);
+        if (follower.isPresent()) {
+
+        }
 
         follower.ifPresent(repository::delete);
     }
