@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LivestreamResponse extends ApplicationModelResponse {
-    private String streamKey;
     private String dvrFile;
     private String content;
 

@@ -16,10 +16,16 @@ public class Notification extends ApplicationModel {
     private String content;
 
     @Column
-    private Long livestreamId;
+    @Builder.Default
+    private Long livestreamId = -1L;
 
     @Column
-    private Long triggeredUserId;
+    @Builder.Default
+    private String livestreamKey = "";
+
+    @Column
+    @Builder.Default
+    private Long triggeredUserId = -1L;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(nullable = false)

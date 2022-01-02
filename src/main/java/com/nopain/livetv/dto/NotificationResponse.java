@@ -8,6 +8,7 @@ import lombok.Setter;
 public class NotificationResponse extends ApplicationModelResponse {
     private String content;
     private Long livestreamId;
+    private String livestreamKey;
     private Long triggeredUserId;
     private Boolean isRead;
 }

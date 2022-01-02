@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class BaseStreamEvent {
     private ActionType action;
-    private String stream;
+    private Long stream;
 }

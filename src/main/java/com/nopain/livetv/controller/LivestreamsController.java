@@ -6,6 +6,7 @@ import com.nopain.livetv.exception.common.HttpException;
 import com.nopain.livetv.mapper.CommentMapper;
 import com.nopain.livetv.mapper.LivestreamMapper;
 import com.nopain.livetv.mapper.ReactionMapper;
+import com.nopain.livetv.model.Livestream;
 import com.nopain.livetv.security.model.UserDetailsImpl;
 import com.nopain.livetv.service.LivestreamService;
 import com.nopain.livetv.service.StompService;
@@ -24,6 +25,20 @@ import java.util.List;
 public class LivestreamsController {
     private final LivestreamService service;
     private final StompService stompService;
+
+    @JWTSecured
+    @PutMapping("/{id}/end")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<LivestreamResponse> end(
+            @PathVariable Long id
+    ) {
+        Livestream livestream = service.find(id);
+        service.endLivestream(livestream);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(LivestreamMapper.INSTANCE.toResponse(livestream));
+    }
 
     @JWTSecured
     @GetMapping

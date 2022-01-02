@@ -26,10 +26,9 @@ public class CallbackService {
     private final SrsProperties srsProperties;
     private final RestTemplate restTemplate;
     private final StompService stompService;
-    private final NotificationService notificationService;
 
     public void onEvent(BaseStreamEvent event) throws NotFoundException {
-        var livestream = livestreamService.findByStreamKey(event.getStream());
+        var livestream = livestreamService.find(event.getStream());
         var action = event.getAction();
 
         switch (action) {
@@ -55,16 +54,11 @@ public class CallbackService {
     private void onPublish(Livestream livestream) {
         livestream.setStatus(LivestreamStatus.STREAMING);
         livestreamRepository.save(livestream);
-
-        notificationService.pushPublishEvent(livestream);
     }
 
     private void onUnPublish(Livestream livestream) {
-        livestream.setStatus(LivestreamStatus.RECORDING);
-        livestream.setViewsCount(0);
+        livestream.setStatus(LivestreamStatus.WAITING);
         livestreamRepository.save(livestream);
-
-        stompService.pubEndLivestream(livestream.getId());
     }
 
     private void updateViewsCount(Livestream livestream) {
@@ -81,7 +75,7 @@ public class CallbackService {
             var streamInfo = allStreams
                     .getStreams()
                     .stream()
-                    .filter(s -> s.getName().equals(livestream.getStreamKey()))
+                    .filter(s -> s.getName().equals(livestream.getId().toString()))
                     .findFirst()
                     .orElseThrow();
             var viewsCount = streamInfo.getClients();
@@ -97,9 +91,6 @@ public class CallbackService {
     private void onDvr(Livestream livestream, String file) {
         String dvrFile = file.replace("./objs/nginx/html", "");
         livestream.setDvrFile(dvrFile);
-        livestream.setStatus(LivestreamStatus.END);
         livestreamRepository.save(livestream);
-
-        stompService.pubDvrDone(livestream.getId(), file);
     }
 }

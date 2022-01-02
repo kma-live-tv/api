@@ -37,7 +37,7 @@ public class NotificationService {
         stompService.pubNewNotification(notification);
     }
 
-    public void pushPublishEvent(Livestream livestream) {
+    public void pushStartEvent(Livestream livestream) {
         var user = livestream.getUser();
         var followers = user.getFollowers();
 
