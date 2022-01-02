@@ -17,7 +17,7 @@ public class NotificationService {
     private final StompService stompService;
 
     public List<Notification> owned(User user) {
-        return user.getNotifications();
+        return repository.findByUserIdOrderByCreatedAtDesc(user.getId());
     }
 
     public void pushFollowEvent(Follower follower) {
@@ -66,5 +66,13 @@ public class NotificationService {
         var truncated = source.length() > 10;
 
         return truncated ? String.format("%s...", source.substring(0, 10)) : source;
+    }
+
+    public Notification markAsRead(Long id) {
+        var notif = repository.findById(id).orElseThrow();
+        notif.setIsRead(true);
+        repository.save(notif);
+
+        return notif;
     }
 }

@@ -9,4 +9,5 @@ public class NotificationResponse extends ApplicationModelResponse {
     private String content;
     private Long livestreamId;
     private Long triggeredUserId;
+    private Boolean isRead;
 }

@@ -16,4 +16,6 @@ public interface LivestreamRepository extends JpaRepository<Livestream, Long>, J
     int countByStatus(LivestreamStatus statuses);
 
     List<Livestream> findByStatus(LivestreamStatus status);
+
+    List<Livestream> findByUserId(Long userId);
 }

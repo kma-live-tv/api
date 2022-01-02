@@ -35,3 +35,4 @@ build/
 application-local.properties
 .env
 srs.local.conf
+!/src/main/java/com/nopain/livetv/service/LivestreamService.java

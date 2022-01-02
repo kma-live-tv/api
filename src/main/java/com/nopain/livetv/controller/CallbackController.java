@@ -24,6 +24,7 @@ public class CallbackController {
 
     @PostMapping("/streams")
     public ResponseEntity<Integer> onStreams(@Valid @RequestBody BaseStreamEvent event) throws NotFoundException {
+        log.info("STREAM EVENT");
         service.onEvent(event);
 
         return ResponseEntity

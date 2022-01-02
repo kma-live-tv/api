@@ -60,5 +60,5 @@ public class User extends ApplicationModel {
     private List<Notification> notifications;
 
     @Transient
-    private boolean isFollowed;
+    private boolean isFollowed = false;
 }

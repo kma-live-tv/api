@@ -24,4 +24,8 @@ public class Notification extends ApplicationModel {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(nullable = false)
     private User user;
+
+    @Column
+    @Builder.Default
+    private Boolean isRead = false;
 }

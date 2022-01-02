@@ -1,11 +1,14 @@
 package com.nopain.livetv.controller;
 
 import com.nopain.livetv.decorator.JWTSecured;
+import com.nopain.livetv.dto.LivestreamResponse;
 import com.nopain.livetv.dto.UserResponse;
 import com.nopain.livetv.exception.common.HttpException;
+import com.nopain.livetv.mapper.LivestreamMapper;
 import com.nopain.livetv.mapper.UserMapper;
 import com.nopain.livetv.security.model.UserDetailsImpl;
 import com.nopain.livetv.service.FollowService;
+import com.nopain.livetv.service.LivestreamService;
 import com.nopain.livetv.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +24,7 @@ import java.util.List;
 public class UsersController {
     private final FollowService followService;
     private final UserService userService;
+    private final LivestreamService livestreamService;
 
     @GetMapping("/me")
     @JWTSecured
@@ -83,5 +87,23 @@ public class UsersController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(UserMapper.INSTANCE.toResponse(userService.findUser(id, userDetails.getUser())));
+    }
+
+    @GetMapping("/{id}/livestreams")
+    @JWTSecured
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<LivestreamResponse>> ofUser(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        var user = userDetails.getUser();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(
+                        LivestreamMapper.INSTANCE.toResponseList(
+                                livestreamService.ofUser(user.getId())
+                        )
+                );
     }
 }

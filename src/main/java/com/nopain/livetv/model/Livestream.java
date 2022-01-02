@@ -23,7 +23,8 @@ public class Livestream extends ApplicationModel {
     private String dvrFile;
 
     @Enumerated(EnumType.STRING)
-    private LivestreamStatus status;
+    @Builder.Default
+    private LivestreamStatus status = LivestreamStatus.STREAMING;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(nullable = false)

@@ -9,7 +9,6 @@ import com.nopain.livetv.repository.CommentRepository;
 import com.nopain.livetv.repository.LivestreamRepository;
 import com.nopain.livetv.repository.ReactionRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,12 +34,6 @@ public class LivestreamService {
     }
 
     public Livestream create(User user, LivestreamRequest request) throws HttpException {
-        var streamingCount = repository.countByStatus(LivestreamStatus.STREAMING);
-
-        if (streamingCount > 0) {
-            throw new HttpException(HttpStatus.BAD_REQUEST, "Bạn đang livestream rồi");
-        }
-
         var livestream = Livestream
                 .builder()
                 .user(user)
@@ -75,5 +68,9 @@ public class LivestreamService {
         reactionRepository.save(reaction);
 
         return reaction;
+    }
+
+    public List<Livestream> ofUser(Long userId) {
+        return repository.findByUserId(userId);
     }
 }
