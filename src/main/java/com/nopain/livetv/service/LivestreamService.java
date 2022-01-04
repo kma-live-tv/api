@@ -10,6 +10,7 @@ import com.nopain.livetv.repository.LivestreamRepository;
 import com.nopain.livetv.repository.ReactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,10 @@ public class LivestreamService {
     private final StompService stompService;
 
     public List<Livestream> streamings() {
-        return repository.findByStatus(LivestreamStatus.STREAMING);
+        return repository.findByStatusIn(new LivestreamStatus[]{
+                LivestreamStatus.STREAMING,
+                LivestreamStatus.WAITING
+        });
     }
 
     public Livestream find(Long id) {
@@ -37,6 +41,18 @@ public class LivestreamService {
     }
 
     public Livestream create(User user, LivestreamRequest request) throws HttpException {
+        var streaming = repository.findByUserIdAndStatus(user.getId(), LivestreamStatus.STREAMING);
+
+        if (streaming.isPresent()) {
+            throw new HttpException(HttpStatus.BAD_REQUEST, "Bạn đang livestream rồi");
+        }
+
+        var waiting = repository.findByUserIdAndStatus(user.getId(), LivestreamStatus.WAITING);
+
+        if (waiting.isPresent()) {
+            return waiting.get();
+        }
+
         var livestream = Livestream
                 .builder()
                 .user(user)
@@ -87,7 +103,7 @@ public class LivestreamService {
     @Async
     public void closeTimeoutLivestreams() {
         var waitings = repository.findTimeoutLivestreams(
-                Instant.now().minus(1, ChronoUnit.MINUTES)
+                Instant.now().minus(30, ChronoUnit.SECONDS)
         );
 
         waitings.forEach(this::endLivestream);

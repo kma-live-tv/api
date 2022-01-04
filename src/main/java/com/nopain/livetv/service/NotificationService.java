@@ -1,9 +1,6 @@
 package com.nopain.livetv.service;
 
-import com.nopain.livetv.model.Follower;
-import com.nopain.livetv.model.Livestream;
-import com.nopain.livetv.model.Notification;
-import com.nopain.livetv.model.User;
+import com.nopain.livetv.model.*;
 import com.nopain.livetv.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +15,20 @@ public class NotificationService {
 
     public List<Notification> owned(User user) {
         return repository.findByUserIdOrderByCreatedAtDesc(user.getId());
+    }
+
+    public void pushDonateReceived(User user, Order order) {
+        var donator = order.getUser();
+        var notification = Notification
+                .builder()
+                .content(
+                        String.format("%s đã tặng %s sao cho bạn")
+                )
+                .user(user)
+                .triggeredUserId(donator.getId())
+                .build();
+        repository.save(notification);
+        stompService.pubNewNotification(notification);
     }
 
     public void pushFollowEvent(Follower follower) {

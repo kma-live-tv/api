@@ -10,13 +10,16 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LivestreamRepository extends JpaRepository<Livestream, Long>, JpaSpecificationExecutor<Livestream> {
-    List<Livestream> findByStatus(LivestreamStatus status);
+    List<Livestream> findByStatusIn(LivestreamStatus[] status);
 
     List<Livestream> findByUserId(Long userId);
 
     @Query(value = "SELECT lt FROM Livestream lt WHERE lt.status = 'WAITING' AND lt.waitingFrom < :timeoutAt")
     List<Livestream> findTimeoutLivestreams(@Param("timeoutAt") Instant timeoutAt);
+
+    Optional<Livestream> findByUserIdAndStatus(Long userId, LivestreamStatus status);
 }

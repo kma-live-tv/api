@@ -9,7 +9,9 @@ import com.nopain.livetv.mapper.ReactionMapper;
 import com.nopain.livetv.model.Livestream;
 import com.nopain.livetv.security.model.UserDetailsImpl;
 import com.nopain.livetv.service.LivestreamService;
+import com.nopain.livetv.service.OrderService;
 import com.nopain.livetv.service.StompService;
+import com.stripe.exception.StripeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import java.util.List;
 public class LivestreamsController {
     private final LivestreamService service;
     private final StompService stompService;
+    private final OrderService orderService;
 
     @JWTSecured
     @PutMapping("/{id}/end")
@@ -122,5 +125,27 @@ public class LivestreamsController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @JWTSecured
+    @PostMapping("/{id}/give-stars")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<String> giveStars(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long id,
+            @Valid @RequestBody GiveStarsRequest request
+    ) throws StripeException {
+        var user = userDetails.getUser();
+        var livestream = service.find(id);
+        var amount = request.getAmount();
+        var order = orderService.create(
+                livestream,
+                user,
+                amount
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(order.getIntentClientSecret());
     }
 }
