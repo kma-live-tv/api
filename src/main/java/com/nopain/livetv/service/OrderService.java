@@ -7,15 +7,18 @@ import com.nopain.livetv.repository.OrderRepository;
 import com.nopain.livetv.repository.UserRepository;
 import com.stripe.exception.StripeException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
     private final OrderRepository repository;
     private final StripeService stripeService;
     private final UserRepository userRepository;
     private final NotificationService notificationService;
+    private final LivestreamService livestreamService;
 
     public Order create(Livestream livestream, User user, int amount) throws StripeException {
         var paymentIntent = stripeService.createPaymentIntent(amount * 20000L);
@@ -49,5 +52,19 @@ public class OrderService {
         userRepository.save(user);
 
         notificationService.pushDonateReceived(user, order);
+        livestreamService.commentGiveStars(livestream, order);
+
+        var donator = order.getUser();
+
+        log.info(
+                String.format(
+                        "User %d - %s give %d stars for User %d - %s",
+                        donator.getId(),
+                        donator.getUsername(),
+                        order.getAmount(),
+                        user.getId(),
+                        user.getUsername()
+                )
+        );
     }
 }

@@ -102,7 +102,6 @@ public class LivestreamsController {
         var user = userDetails.getUser();
         var comment = service.comment(user, id, commentRequest);
         var response = CommentMapper.INSTANCE.toResponse(comment);
-        stompService.pubNewComment(id, response);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

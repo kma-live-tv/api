@@ -22,4 +22,8 @@ public class Comment extends ApplicationModel {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(nullable = false)
     private User user;
+
+    @Column
+    @Builder.Default
+    private Integer stars = 0;
 }

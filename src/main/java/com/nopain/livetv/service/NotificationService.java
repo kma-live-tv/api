@@ -22,7 +22,7 @@ public class NotificationService {
         var notification = Notification
                 .builder()
                 .content(
-                        String.format("%s đã tặng %s sao cho bạn")
+                        String.format("%s đã tặng %d sao cho bạn", donator.getDisplayName(), order.getAmount())
                 )
                 .user(user)
                 .triggeredUserId(donator.getId())

@@ -4,6 +4,7 @@ import com.nopain.livetv.dto.CommentRequest;
 import com.nopain.livetv.dto.LivestreamRequest;
 import com.nopain.livetv.dto.ReactionRequest;
 import com.nopain.livetv.exception.common.HttpException;
+import com.nopain.livetv.mapper.CommentMapper;
 import com.nopain.livetv.model.*;
 import com.nopain.livetv.repository.CommentRepository;
 import com.nopain.livetv.repository.LivestreamRepository;
@@ -34,6 +35,20 @@ public class LivestreamService {
                 LivestreamStatus.STREAMING,
                 LivestreamStatus.WAITING
         });
+    }
+
+    public void commentGiveStars(Livestream livestream, Order order) {
+        var comment = Comment
+                .builder()
+                .content(
+                        String.format("%s đã tặng %d sao", order.getUser().getDisplayName(), order.getAmount())
+                )
+                .stars(order.getAmount())
+                .livestream(livestream)
+                .user(livestream.getUser())
+                .build();
+        commentRepository.save(comment);
+        stompService.pubNewComment(livestream.getId(), CommentMapper.INSTANCE.toResponse(comment));
     }
 
     public Livestream find(Long id) {
@@ -73,6 +88,7 @@ public class LivestreamService {
                 .livestream(find(livestreamId))
                 .build();
         commentRepository.save(comment);
+        stompService.pubNewComment(livestreamId, CommentMapper.INSTANCE.toResponse(comment));
 
         return comment;
     }

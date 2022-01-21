@@ -12,4 +12,5 @@ import lombok.Setter;
 public class CommentResponse extends ApplicationModelResponse {
     private String content;
     private UserResponse user;
+    private Integer stars;
 }
